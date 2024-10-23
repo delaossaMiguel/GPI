@@ -30,6 +30,9 @@
                 if (estaEnPeriodo($fila['fecha_inicial'], $fila['hora_inicio'], $fila['fecha_fin'], $fila['hora_fin'])) {
                     $examenDisponible = true;
                     $nombreExamen = $fila['nombre'];
+                    // Guardamos la fecha y hora final del examen en la sesión
+                    $_SESSION['fecha_fin'] = $fila['fecha_fin'];
+                    $_SESSION['hora_fin'] = $fila['hora_fin'];
                     break;
                 }
             }
@@ -64,7 +67,7 @@
                 echo '<a href="examenes_alumno.php" class="back-btn">Volver a mis Exámenes</a>';
             } else {
                 echo "<h2>Examen: $nombreExamen</h2>";
-                echo '<form action="" method="POST">';
+                echo '<form action="" method="POST" id="examen-form">';
 
                 // Mostrar preguntas tipo test
                 $sqlPreguntas = "SELECT p.id_pregunta, p.pregunta, p.opcion1, p.opcion2, p.opcion3, p.opcion4 
@@ -82,7 +85,7 @@
                     echo "<div class='opciones'>";
                     $i=1;
                     foreach ($opciones as $opcionIndex => $opcion) {
-                        echo "<label class='opcion'><input type='radio' name='pregunta_$index' value='$i' required> $opcion</label>";
+                        echo "<label class='opcion'><input type='radio' name='pregunta_$index' value='$i'> $opcion</label>";
                         $i++;
                     }
                     echo "</div>";
@@ -103,7 +106,7 @@
                     echo "<div class='pregunta'>";
                     echo "<strong>Pregunta de Desarrollo " . ($indexDesarrollo + 1) . ":</strong> $preguntaDesarrollo";
                     echo "<div class='opciones'>";
-                    echo "<textarea name='preguntaD_$indexDesarrollo' rows='4' cols='50' required></textarea>";
+                    echo "<textarea name='preguntaD_$indexDesarrollo' rows='4' cols='50'></textarea>";
                     echo "</div>";
                     echo "</div>";
                     $indexDesarrollo++;
@@ -119,5 +122,38 @@
         $conn->close();
         ?>
     </div>
+    <?php if ($examenDisponible): ?>
+    <div id="contador"></div>
+
+    <script>
+        const fechaFin = "<?php echo $_SESSION['fecha_fin']; ?>";
+        const horaFin = "<?php echo $_SESSION['hora_fin']; ?>";
+        const fechaHoraFinal = new Date(`${fechaFin}T${horaFin}`);
+
+        const contadorElement = document.getElementById("contador");
+
+        const countdown = setInterval(() => {
+            const ahora = new Date();
+            const tiempoRestante = fechaHoraFinal - ahora;
+
+            if (tiempoRestante <= 0) {
+                clearInterval(countdown);
+                alert("El tiempo ha terminado. Enviando el examen automáticamente.");
+                document.forms['examen-form'].submit();
+            } else {
+                const horas = Math.floor(tiempoRestante / (1000 * 60 * 60));
+                const minutos = Math.floor((tiempoRestante % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((tiempoRestante % (1000 * 60)) / 1000);
+
+                contadorElement.textContent = `Tiempo restante: ${horas}h ${minutos}m ${segundos}s`;
+            }
+        }, 1000);
+
+        formElement.addEventListener('submit', function() {
+            clearInterval(countdown);
+        });
+
+    </script>
+    <?php endif; ?>
 </body>
 </html>

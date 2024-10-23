@@ -1,7 +1,14 @@
 <?php
 
 	include "../bbdd/conexion.php";
+	session_start();
 
+	// Verificar si el usuario ha iniciado sesión
+	if (!isset($_SESSION['id_usuario'])) {
+		// Redirigir al login si no hay sesión activa
+		header('Location: ../frontend/login.php');
+		exit();
+	}
 	/*
 	Obtenemos el listado de comunidades.
 	Devuelve un resultset con las comunidades

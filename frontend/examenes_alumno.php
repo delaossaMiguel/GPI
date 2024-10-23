@@ -10,7 +10,6 @@
     <?php
     require '../backend/modelo.php';
     $con = conexion(); 
-    session_start();
     if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'Alumno') {
         header('Location: login.php');
         exit();
@@ -84,6 +83,7 @@
             echo "<li><strong>{$examenPersonal['nombre']}</strong> - Cierre: {$examenPersonal['fecha_fin']} {$examenPersonal['hora_fin']}";
             if (estaEnPeriodo($examenPersonal['fecha_inicial'], $examenPersonal['hora_inicio'], $examenPersonal['fecha_fin'], $examenPersonal['hora_fin'])) {
                 echo " - <a href='hacer_examen.php?nombre=" . urlencode($examenPersonal['nombre']) . "'>Realizar Examen</a>";
+
             }
             echo "</li>";
         }

@@ -1,5 +1,6 @@
 <?php
 require_once '../bbdd/conexion.php';
+require_once 'mail.php';
 
 session_start();
 $con = conexion();
@@ -24,14 +25,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['nombre'] = $nombre;
             $_SESSION['apellido'] = $apellido;
 
-            if ($rol === 'Administrador') {
-                header('Location: plantillaModificar.html');
-            } elseif ($rol === 'Profesor') {
+            // Redirigir al usuario a su página según su rol
+            if ($_SESSION['rol'] === 'Administrador') {
+                header('Location: ../backend/plantillaModificar.html');
+            } elseif ($_SESSION['rol'] === 'Profesor') {
                 header('Location: profesor.php');
-            } elseif ($rol === 'Alumno') {
+            } elseif ($_SESSION['rol'] === 'Alumno') {
                 header('Location: alumno.php');
             }
             exit();
+            /*
+            //Generar token
+            $token = bin2hex(random_bytes(32));
+            $token_expira = time() + 600;
+
+            $_SESSION['token_2fa'] = $token;
+            $_SESSION['token_2fa_expira'] = $token_expira;
+
+            $verificacion_link = "http://localhost/g1-7/frontend/verificar.php?token=" . $token;
+
+            $asunto = "Verificación de acceso";
+            $mensaje = "Hola $nombre,\n\nPor favor, confirma tu acceso haciendo clic en el siguiente enlace:\n\n$verificacion_link\n\nEste enlace es válido por 10 minutos.";
+            
+            enviarCorreo('migueeldelaossa@gmail.com', $asunto, $mensaje);
+
+            // Redirigir a una página de mensaje de verificación
+            header('Location: verificar_mensaje.php');
+            exit();*/
         } else {
             $error = "Usuario o contraseña incorrectos";
         }

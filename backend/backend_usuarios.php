@@ -3,7 +3,6 @@ require_once("modelo.php");
 require_once("vista.php");
 
 
-
 if (isset($_GET['accion'])) {
     $accion = $_GET['accion'];
 } else {

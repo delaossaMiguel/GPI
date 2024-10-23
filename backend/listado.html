@@ -1,0 +1,63 @@
+<html>
+
+<!--tabla añadir usuarios-->
+<br>
+<form action="index.php?id=1&accion=anadir_usuario" method="post">
+    <table border=1>
+        <tr>
+            <th>nombre</th>
+            <th>primer apellido</th>
+            <th>segundo apellido</th>
+            <th>email</th>
+            <th>passwd</th>
+            <th>rol</th>
+            <th>añadir</th>
+        </tr>
+        <tr>
+            <td><hp><input type="text"name="nombre"id="nombre"></hp></td>
+            <td><hp><input type="text"name="apellido1"id="apellido1"></hp></td>
+            <td><hp><input type="text"name="apellido2"id="apellido1"></hp></td>
+            <td><hp><input type="text"name="email"id="email"></hp></td>
+            <td><hp><input type="text"name="passwd"id="passwd"></hp></td><!--sha1 con php por aqui??-->
+            <td>
+                <hp><select name ="rol" id="rol">
+                    <option value="Alumno">Alumno</option>
+                    <option value="Profesor">Profesor</option>
+                </select>
+                </hp>
+            </td>
+            
+            <td><hp><input type="submit" value="anadir"></hp></td>
+        </tr>
+    </table>
+</form>
+<br>
+    <!--tabla mostrar usuarios-->
+    <table border=1>
+		<tr>
+			<th>nombre</th>
+			<th>primer apellido</th>
+			<th>segundo apellido</th>
+			<th>email</th>
+			<th>passwd</th>
+            <th>rol</th>
+            <th>modificar</th>
+            <th>eliminar</th>
+		</tr>
+		##fila##
+		<tr>
+			<td>##nombre##</td>
+			<td>##apellido1##</td>
+			<td>##apellido2##</td>
+            <td>##email##</td>
+            <td>##passwd##</td>
+            <td>##rol##</td>
+			<td><a href="index.php?id_usuario=##id##&accion=modificar_usuario&id=1">Modificar</a></td>
+			<td><a href="index.php?id_usuario=##id##&accion=eliminar_usuario&id=1">Eliminar</a></td>
+		</tr>
+		##fila##
+    </table>
+ 
+   
+    
+</html>

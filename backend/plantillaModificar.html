@@ -1,0 +1,32 @@
+<html>
+    <table border=1>
+		<tr>
+			<th>nombre</th>
+			<th>primer apellido</th>
+			<th>segundo apellido</th>
+			<th>email</th>
+			<th>passwd</th>
+            <th>rol</th>
+            <th>modificar</th>
+		</tr>
+        <tr>
+            <form action="backend_usuarios.php?id_usuario=##id##&id=1&accion=validar_modificar_usuario" method="post">
+            <td><hp><input type="text"name="nombre"id="nombre" value="##nombre##"></hp></td>
+            <td><hp><input type="text"name="apellido1"id="apellido1"value="##apellido1##"></hp></td>
+            <td><hp><input type="text"name="apellido2"id="apellido1"value="##apellido2##"></hp></td>
+            <td><hp><input type="text"name="email"id="email"value="##email##"></hp></td>
+            <td><hp><input type="text"name="passwd"id="passwd"value="##passwd##"></hp></td><!--sha1 con php por aqui??-->
+            <td>
+                <hp><select name ="rol" id="rol">
+                    <option value="Alumno">alumno</option>
+                    <option value="Profesor">profesor</option>
+                </select>
+                </hp>
+            </td>
+            
+            <td><hp><input type="submit" value="anadir"></hp></td>
+
+        </form>
+        </tr>
+    </table>
+</html>

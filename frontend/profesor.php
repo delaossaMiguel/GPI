@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Verifica si el usuario está autenticado y es un profesor
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'Profesor') {
     header('Location: login.php');
     exit();
@@ -17,13 +16,23 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'Profesor') {
 </head>
 <body>
     <h1>Bienvenido, <?php echo $_SESSION['nombre'] . ' ' . $_SESSION['apellido']; ?>!</h1>
-    <h2>Perfil de Profesor</h2>
-    <p>Grupo: <?php echo $_SESSION['grupo']; ?></p>
 
     <h3>Opciones</h3>
     <ul>
         <li><a href="examenes_profesor.php">Ver Exámenes</a></li>
     </ul>
+
+    <h3>Cambiar Contraseña</h3>
+    <form action="cambiar_contrasena.php" method="POST">
+        <label>Contraseña Actual:</label>
+        <input type="password" name="contrasena_actual" required><br>
+        <label>Nueva Contraseña:</label>
+        <input type="password" name="nueva_contrasena" required><br>
+        <label>Confirmar Nueva Contraseña:</label>
+        <input type="password" name="confirmar_contrasena" required><br>
+        <button type="submit">Cambiar Contraseña</button>
+    </form>
+
     <a href="logout.php">Cerrar Sesión</a>
 </body>
 </html>

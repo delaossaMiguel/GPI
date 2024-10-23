@@ -1,34 +1,46 @@
 <?php
+require_once '../bbdd/conexion.php';
+
 session_start();
+$con = conexion();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = $_POST['usuario'];
     $contrasena = $_POST['contrasena'];
 
-    $usuarios = file('users.txt');
-    foreach ($usuarios as $user) {
-        list($email, $apellido, $rol, $grupo, $userContrasena, $nombre) = explode(' ', trim($user));
+    $query = "SELECT id_usuario, email, apellido1, rol, nombre, passwd FROM usuario WHERE email = ?";
+    $stmt = $con->prepare($query);
+    $stmt->bind_param("s", $usuario);
+    $stmt->execute();
+    $stmt->store_result();
 
-        if ($email === $usuario && $userContrasena === $contrasena) {
+    if ($stmt->num_rows > 0) {
+        $stmt->bind_result($id_usuario, $email, $apellido, $rol, $nombre, $hash);
+        $stmt->fetch();
+
+        if (($contrasena)== $hash) {
+            $_SESSION['id_usuario'] = $id_usuario; 
             $_SESSION['rol'] = $rol;
             $_SESSION['nombre'] = $nombre;
-            $_SESSION['grupo'] = $grupo;
             $_SESSION['apellido'] = $apellido;
-            // Redirigir según el rol
+
             if ($rol === 'Administrador') {
-                header('Location: admin.php');
-                exit();
+                header('Location: plantillaModificar.html');
             } elseif ($rol === 'Profesor') {
-                header('Location: examenes_profesor.php');
-                exit();
+                header('Location: profesor.php');
             } elseif ($rol === 'Alumno') {
-                header('Location: examenes_alumno.php');
-                exit();
+                header('Location: alumno.php');
             }
+            exit();
+        } else {
+            $error = "Usuario o contraseña incorrectos";
         }
+    } else {
+        $error = "Usuario o contraseña incorrectos";
     }
-    $error = "Usuario o contraseña incorrectos";
+    $stmt->close();
 }
+$con->close();
 ?>
 <!DOCTYPE html>
 <html lang="es">
